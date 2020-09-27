@@ -1,5 +1,6 @@
 package hilfling.backend.hilfling
 
+import hilfling.backend.hilfling.configurations.KtormConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
