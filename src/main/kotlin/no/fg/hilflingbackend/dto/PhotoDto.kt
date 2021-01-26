@@ -12,7 +12,7 @@ data class PhotoDto(
   val mediumUrl: String,
   val largeUrl: String,
 
-  val motive: Motive,
+  val motive: MotiveDto,
   val placeDto: PlaceDto,
   val securityLevel: SecurityLevelDto,
   val gang: GangDto,
@@ -26,7 +26,7 @@ data class PhotoDto(
       this.smallUrl = photo.smallUrl
       this.mediumUrl = photo.mediumUrl
       this.largeUrl = photo.largeUrl
-      this.motive = photo.motive
+      this.motive = photo.motive.toEntity()
       this.place = photo.placeDto.toEntity()
       this.securityLevel = photo.securityLevel.toEntity()
       this.gang = photo.gang.toEntity()
@@ -37,7 +37,7 @@ data class PhotoDto(
     fun createWithFileName(
       fileName: ImageFileName,
       isGoodPicture: Boolean,
-      motive: Motive,
+      motive: MotiveDto,
       placeDto: PlaceDto,
       securityLevel: SecurityLevelDto,
       gang: GangDto,

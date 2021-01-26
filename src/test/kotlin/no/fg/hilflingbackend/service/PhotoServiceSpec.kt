@@ -4,6 +4,7 @@ import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import no.fg.hilflingbackend.MockDataService
 import no.fg.hilflingbackend.configurations.ImageFileStorageProperties
+import no.fg.hilflingbackend.dto.MotiveDto
 import no.fg.hilflingbackend.model.Motive
 import no.fg.hilflingbackend.repository.AlbumRepository
 import no.fg.hilflingbackend.repository.CategoryRepository
@@ -38,7 +39,7 @@ class PhotoServiceSpec : Spek({
     val mockPhoto = mockDataService.generatePhoto().first()
     val album = mockDataService.generateAlbumData().first()
     val motive = mock<MotiveRepository> {
-      on { findById(UUID.randomUUID()) } doReturn Motive { title = "test" }
+      on { findById(UUID.randomUUID()) } doReturn mockDataService.generateMotiveData().first()
     }
     val photoGangBangerRepository = mock<PhotoGangBangerRepository> {
       on { findById(mockDataService.generatePhotoGangBangerData()[0].photoGangBangerId.id) } doReturn mockDataService.generatePhotoGangBangerData()[0]
@@ -47,7 +48,7 @@ class PhotoServiceSpec : Spek({
     val motiveRepository = mock<MotiveRepository> {
       on { findById(UUID.fromString("94540f3c-77b8-4bc5-acc7-4dd7d8cc4bcd")) } doReturn mockDataService
         .generateMotiveData().first()
-      on { findById(mockDataService.generateMotiveData()[1].id) } doReturn mockDataService
+      on { findById(mockDataService.generateMotiveData()[1].motiveId.id) } doReturn mockDataService
         .generateMotiveData()[1]
     }
     val albumRepository: AlbumRepository = mock<AlbumRepository> {
@@ -114,8 +115,8 @@ class PhotoServiceSpec : Spek({
         val response = photoService.saveDigitalPhotos(
           isGoodPictureList = listOf(true, true),
           motiveIdList = listOf(
-            mockDataService.generateMotiveData()[0].id,
-            mockDataService.generateMotiveData()[1].id
+            mockDataService.generateMotiveData()[0].motiveId.id,
+            mockDataService.generateMotiveData()[1].motiveId.id
           ),
           placeIdList = listOf(
             mockDataService.generatePlaceData().first().placeId.id,

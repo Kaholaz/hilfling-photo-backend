@@ -1,32 +1,10 @@
 package no.fg.hilflingbackend
 
 import me.liuwj.ktorm.database.Database
-import no.fg.hilflingbackend.dto.AlbumDto
-import no.fg.hilflingbackend.dto.AlbumId
-import no.fg.hilflingbackend.dto.CategoryDto
-import no.fg.hilflingbackend.dto.CategoryId
-import no.fg.hilflingbackend.dto.GangDto
-import no.fg.hilflingbackend.dto.GangId
-import no.fg.hilflingbackend.dto.PhotoDto
-import no.fg.hilflingbackend.dto.PhotoGangBangerDto
-import no.fg.hilflingbackend.dto.PhotoGangBangerId
-import no.fg.hilflingbackend.dto.PhotoGangBangerPositionDto
-import no.fg.hilflingbackend.dto.PhotoGangBangerPositionId
-import no.fg.hilflingbackend.dto.PhotoId
-import no.fg.hilflingbackend.dto.PhotoTagDto
-import no.fg.hilflingbackend.dto.PlaceDto
-import no.fg.hilflingbackend.dto.PlaceId
-import no.fg.hilflingbackend.dto.PositionDto
-import no.fg.hilflingbackend.dto.PositionId
-import no.fg.hilflingbackend.dto.RelationshipStatus
-import no.fg.hilflingbackend.dto.SamfundetUserDto
-import no.fg.hilflingbackend.dto.SamfundetUserId
-import no.fg.hilflingbackend.dto.SecurityLevelDto
-import no.fg.hilflingbackend.dto.SecurityLevelId
-import no.fg.hilflingbackend.dto.SemesterStart
-import no.fg.hilflingbackend.dto.toEntity
+import no.fg.hilflingbackend.dto.*
 import no.fg.hilflingbackend.model.EventOwner
 import no.fg.hilflingbackend.model.Motive
+import no.fg.hilflingbackend.model.toDto
 import no.fg.hilflingbackend.repository.AlbumRepository
 import no.fg.hilflingbackend.repository.ArticleRepository
 import no.fg.hilflingbackend.repository.ArticleTagRepository
@@ -165,23 +143,23 @@ class MockDataService {
       )
     )
 
-  fun generateMotiveData(): List<Motive> =
+  fun generateMotiveData(): List<MotiveDto> =
     listOf(
       Motive {
         id = UUID.fromString("94540f3c-77b8-4bc5-acc7-4dd7d8cc4bcd")
         title = "Amber Butts spiller på klubben"
         album = generateAlbumData().first().toEntity()
-        eventOwner = generateEventOwnerData().first()
+        eventOwner = generateEventOwnerData().first().toEntity()
         category = generateCategoryData().first().toEntity()
-      },
+      }.toDto(),
 
       Motive {
         id = UUID.fromString("94540f3c-77b8-4bc5-acc7-4dd7d8cc5bcd")
         title = "High As a Kite 2020"
         album = generateAlbumData().first().toEntity()
-        eventOwner = generateEventOwnerData().first()
+        eventOwner = generateEventOwnerData().first().toEntity()
         category = generateCategoryData().first().toEntity()
-      }
+      }.toDto()
     )
   fun generateCategoryData(): List<CategoryDto> =
     listOf(
@@ -196,20 +174,20 @@ class MockDataService {
       )
     )
 
-  fun generateEventOwnerData(): List<EventOwner> =
+  fun generateEventOwnerData(): List<EventOwnerDto> =
     listOf(
       EventOwner {
         id = UUID.fromString("afc308c4-06e2-47bb-b97b-70eb3f55e8d9")
         name = "ISFIT"
-      },
+      }.toDto(),
       EventOwner {
         id = UUID.fromString("9265f73d-7b13-4673-9f3b-1db3b6c7d526")
         name = "Samfundet"
-      },
+      }.toDto(),
       EventOwner {
         id = UUID.fromString("e91f1201-e0bf-4d25-8026-b2a2d44c37c3")
         name = "UKA"
-      }
+      }.toDto()
     )
 
   fun generateAlbumData(): List<AlbumDto> {

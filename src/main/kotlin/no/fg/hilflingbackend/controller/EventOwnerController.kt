@@ -1,5 +1,6 @@
 package no.fg.hilflingbackend.controller
 
+import no.fg.hilflingbackend.dto.EventOwnerDto
 import no.fg.hilflingbackend.model.EventOwner
 import no.fg.hilflingbackend.repository.EventOwnerRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,10 +30,10 @@ class EventOwnerController {
 
   @PostMapping
   fun create(
-    @RequestBody eventOwner: EventOwner
+    @RequestBody eventOwnerDto: EventOwnerDto
   ): Int {
     return repository.create(
-      eventOwner
+      eventOwnerDto
     )
   }
 }

@@ -7,7 +7,6 @@ import java.util.UUID
 
 @Component
 interface IRepository<E, D> {
-  fun convertToClass(qrs: QueryRowSet): D
   fun findById(id: UUID): D?
   fun create(dto: D): Int
   fun findAll(offset: Int, limit: Int): Page<D>

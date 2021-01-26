@@ -7,6 +7,7 @@ import me.liuwj.ktorm.entity.find
 import me.liuwj.ktorm.entity.toList
 import no.fg.hilflingbackend.dto.EventOwnerDto
 import no.fg.hilflingbackend.dto.EventOwnerName
+import no.fg.hilflingbackend.dto.toEntity
 import no.fg.hilflingbackend.model.EventOwner
 import no.fg.hilflingbackend.model.event_owners
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,8 +34,8 @@ open class EventOwnerRepository {
   }
 
   fun create(
-    eventOwner: EventOwner
+    eventOwnerDto: EventOwnerDto
   ): Int {
-    return database.event_owners.add(eventOwner)
+    return database.event_owners.add(eventOwnerDto.toEntity())
   }
 }

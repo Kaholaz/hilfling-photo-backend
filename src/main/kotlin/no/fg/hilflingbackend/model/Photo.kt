@@ -33,7 +33,7 @@ fun Photo.toDto(): PhotoDto = PhotoDto(
   smallUrl = this.smallUrl,
   mediumUrl = this.mediumUrl,
   largeUrl = this.largeUrl,
-  motive = this.motive,
+  motive = this.motive.toDto(),
   placeDto = this.place
     .toDto(),
   securityLevel = this.securityLevel.toDto(),

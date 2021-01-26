@@ -5,6 +5,7 @@ import me.liuwj.ktorm.entity.Entity
 import me.liuwj.ktorm.entity.sequenceOf
 import me.liuwj.ktorm.schema.uuid
 import me.liuwj.ktorm.schema.varchar
+import no.fg.hilflingbackend.dto.MotiveDto
 
 interface Motive : BaseModel<Motive> {
   companion object : Entity.Factory<Motive>()
@@ -16,6 +17,13 @@ interface Motive : BaseModel<Motive> {
   var eventOwner: EventOwner
   var album: Album
 }
+
+fun Motive.toDto() = MotiveDto(
+  title = this.title,
+  category = this.category,
+  eventOwner = this.eventOwner,
+  album = this.album
+)
 
 object Motives : BaseTable<Motive>("motive") {
   val title = varchar("title").bindTo { it.title }
