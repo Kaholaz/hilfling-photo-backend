@@ -1,6 +1,7 @@
 package no.fg.hilflingbackend.repository
 
 import me.liuwj.ktorm.database.Database
+import me.liuwj.ktorm.dsl.QuerySource
 import me.liuwj.ktorm.dsl.crossJoin
 import me.liuwj.ktorm.dsl.eq
 import me.liuwj.ktorm.dsl.from
@@ -20,6 +21,7 @@ import no.fg.hilflingbackend.dto.toEntity
 import no.fg.hilflingbackend.model.Albums
 import no.fg.hilflingbackend.model.AnalogPhoto
 import no.fg.hilflingbackend.model.Motives
+import no.fg.hilflingbackend.model.Photo
 import no.fg.hilflingbackend.model.PhotoTagReferences
 import no.fg.hilflingbackend.model.PhotoTags
 import no.fg.hilflingbackend.model.SecurityLevel
@@ -51,28 +53,31 @@ open class PhotoRepository {
 
   val logger = LoggerFactory.getLogger(this::class.java)
 
+  fun Photo.queryPhotoTags(): Photo {
+    database
+    .from(PhotoTags)
+      .crossJoin(PhotoTagReferences)
+      .select(
+        PhotoTags.id,
+        PhotoTags.name,
+        PhotoTagReferences.photoId,
+        PhotoTagReferences.photoTagId
+      )
+      .where { PhotoTagReferences.photoId eq this.id }
+      .map { row ->
+        PhotoTagDto(
+          // TODO: Try to avoid !! null safety override
+          photoTagId = PhotoTagId(row[PhotoTags.id]!!),
+          name = row[PhotoTags.name]!!
+        )
+      }
+    return this
+  }
+
   fun findById(id: UUID): PhotoDto? {
     return database.photos.find { it.id eq id }
-      ?.let { photo ->
-        val tags = database
-          .from(PhotoTags)
-          .crossJoin(PhotoTagReferences)
-          .select(
-            PhotoTags.id,
-            PhotoTags.name,
-            PhotoTagReferences.photoId,
-            PhotoTagReferences.photoTagId
-          )
-          .where { PhotoTagReferences.photoId eq photo.id }
-          .map { row ->
-            PhotoTagDto(
-              // TODO: Try to avoid !! null safety override
-              photoTagId = PhotoTagId(row[PhotoTags.id]!!),
-              name = row[PhotoTags.name]!!
-            )
-          }
-        return photo.toDto(tags)
-      }
+      ?.queryPhotoTags()
+      ?.toDto()
   }
   fun findAnalogPhotoById(id: UUID): AnalogPhoto? {
     return database.analog_photos.find { it.id eq id }
@@ -137,6 +142,7 @@ open class PhotoRepository {
     /*
     photoDto.photoTags.forEach { photoTagDto: PhotoTagDto ->
       logger.info("Adding photoTag ${photoTagDto.name} to ${photoDto.photoId.id}")
+      .insertStuff(UUID, photoIDK
       database.insert(PhotoTagReferences) {
         set(it.id, UUID.randomUUID())
         set(it.photoId, photoDto.photoId.id)
