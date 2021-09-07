@@ -38,6 +38,7 @@ import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.security.InvalidParameterException
 import java.util.UUID
 import java.util.stream.Stream
 import javax.persistence.EntityNotFoundException
@@ -215,7 +216,7 @@ class PhotoService(
         .findById(categoryIdList.get(index))
         ?: throw EntityNotFoundException("Did not find category")
 
-      val validatedFileName = ImageFileName(file.originalFilename ?: "")
+      val validatedFileName = ImageFileName(file.originalFilename ?: throw InvalidParameterException("No filename was submited"))
 
       // Generate Objects
       val photoDto = PhotoDto.createWithFileName(
