@@ -50,8 +50,9 @@ class PhotoController(
     @RequestParam("photoFileList") photoFileList: List<MultipartFile>,
     @RequestParam("isGoodPhotoList") isGoodPhotoList: List<Boolean>,
     @RequestParam("tagList")tagList: List<List<String>>
-  ): ResponseEntity<List<String>> =
-    ResponseEntity(
+  ): ResponseEntity<List<String>> {
+    println(photoFileList)
+    return ResponseEntity(
       photoService.createNewMotiveAndSaveDigitalPhotos(
         motiveTitle = motiveTitle,
         placeName = placeName,
@@ -66,6 +67,8 @@ class PhotoController(
       ),
       HttpStatus.CREATED,
     )
+  }
+
 
   @PostMapping
   fun uploadPhoto(
