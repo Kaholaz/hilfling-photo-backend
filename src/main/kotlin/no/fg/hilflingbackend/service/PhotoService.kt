@@ -1,5 +1,6 @@
 package no.fg.hilflingbackend.service
 
+import no.fg.hilflingbackend.blobStorage.AzureBlobStorage
 import no.fg.hilflingbackend.configurations.ImageFileStorageProperties
 import no.fg.hilflingbackend.dto.AlbumDto
 import no.fg.hilflingbackend.dto.CategoryDto
@@ -34,7 +35,6 @@ import org.springframework.core.io.UrlResource
 import org.springframework.stereotype.Service
 import org.springframework.util.FileSystemUtils
 import org.springframework.web.multipart.MultipartFile
-import java.io.IOException
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -56,6 +56,7 @@ class PhotoService(
   val albumRepository: AlbumRepository,
   val securityLevelRepository: SecurityLevelRepository,
   val photoGangBangerRepository: PhotoGangBangerRepository,
+  val azureBlobStorage: AzureBlobStorage
 ) : IPhotoService {
 
   val logger = LoggerFactory.getLogger(this::class.java)
@@ -225,7 +226,7 @@ class PhotoService(
       // Generate Objects
       val (photoDto, imageFileName) = PhotoDto.createWithFileName(
         fileName = validatedFileName,
-        isGoodPicture = isGoodPictureList.get(index),
+        isGoodPicture = isGoodPictureList[index],
         motive = motive,
         placeDto = place,
         securityLevel = securityLevelDto,
@@ -236,6 +237,14 @@ class PhotoService(
         photoTags = listOf() // TODO: Pass in photoTags
       )
 
+      // Save photo
+      val imageUrl = azureBlobStorage.saveFile(
+        multipartFile = file,
+        fileName = imageFileName,
+        blobContainerName = photoDto.securityLevel.securityLevelType.name.toLowerCase()
+      )
+
+      /*
       val filePath = generateFilePath(
         // TODO: Rename to fileName
         fileName = ImageFileName(photoDto.largeUrl),
@@ -254,6 +263,9 @@ class PhotoService(
         logger.error(ex.toString())
         throw IOException("Something went wrong when saving image file to disk")
       }
+
+       */
+
       // Add PhotoModel to Database
       try {
         photoRepository
@@ -261,10 +273,12 @@ class PhotoService(
         logger.info("Photo created: ${photoDto.largeUrl} ")
       } catch (ex: Exception) {
         logger.error("Failed to save Photo to Database. Deleting file")
-        Files.delete(filePath)
+        // Files.delete(filePath)
+        // TODO: Delete file if not saved to database
       }
 
-      photoDto.largeUrl // Return URLs
+      imageUrl
+      // photoDto.largeUrl // Return URLs
     }
   }
 
@@ -332,7 +346,7 @@ class PhotoService(
       albumDto = albumDto
     )
 
-    val numPhotoGenerated = photoFileList.mapIndexed { index, photoFile ->
+    val photoUrls = photoFileList.mapIndexed { index, photoFile ->
       val photoTagDtos = tagList.get(index).map {
         photoTagRepository
           .findByName(it)
@@ -360,17 +374,29 @@ class PhotoService(
         )
       )
 
-      // Generate PhotoDto
-      photoRepository
-        .createPhoto(photoDto)
+      // Save photo
+      val imageUrl = azureBlobStorage.saveFile(
+        multipartFile = photoFile,
+        fileName = imageFileName,
+        blobContainerName = photoDto.securityLevel.securityLevelType.name.toLowerCase()
+      )
 
-      // GeneratePaths
-      // TODO: Do not hard code this. Fetch from application
-      "http://localhost:8383/${store(photoFile, photoDto, imageFileName)}"
-      // Save shit
+      // Add PhotoModel to Database
+      try {
+        photoRepository
+          .createPhoto(photoDto)
+        logger.info("Photo created: ${photoDto.largeUrl} ")
+      } catch (ex: Exception) {
+        logger.error("Failed to save Photo to Database. Deleting file")
+        // Files.delete(filePath)
+        // TODO: Delete file if not saved to database
+      }
+
+      imageUrl
+      // photoDto.largeUrl // Return URLs
     }
 
-    return numPhotoGenerated
+    return photoUrls
   }
   fun fetchOrCreatePlaceDto(placeName: String) = placeRepository
     .findByName(placeName)

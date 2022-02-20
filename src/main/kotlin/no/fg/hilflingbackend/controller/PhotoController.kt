@@ -43,8 +43,19 @@ class PhotoController(
     @RequestParam("photoFileList") photoFileList: List<MultipartFile>,
     @RequestParam("isGoodPhotoList") isGoodPhotoList: List<Boolean>,
     @RequestParam("tagList")tagList: List<List<String>>
-  ): ResponseEntity<List<String>> =
-    ResponseEntity(
+  ): ResponseEntity<List<String>> {
+    logger.info("MotiveTitle: $motiveTitle")
+    logger.info("PlaceName: $placeName")
+    logger.info("SecurityLevelId: $securityLevelId")
+    logger.info("PhotoGangBangerId: $photoGangBangerId")
+    logger.info("AlbumId: $albumId")
+    logger.info("CategoryName: $categoryName")
+    logger.info("EventOwnerName: $eventOwnerName")
+    logger.info("PhotoFileList: $photoFileList")
+    logger.info("IsGoodPhotoList: $isGoodPhotoList")
+    logger.info("TagList: $tagList")
+
+    return ResponseEntity(
       photoService.createNewMotiveAndSaveDigitalPhotos(
         motiveString = motiveTitle,
         placeString = placeName,
@@ -59,6 +70,7 @@ class PhotoController(
       ),
       HttpStatus.CREATED,
     )
+  }
 
   @PostMapping
   fun uploadPhoto(

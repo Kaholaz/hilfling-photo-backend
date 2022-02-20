@@ -1,6 +1,7 @@
 package no.fg.hilflingbackend.service
 
 import com.nhaarman.mockitokotlin2.mock
+import no.fg.hilflingbackend.blobStorage.AzureBlobStorage
 import no.fg.hilflingbackend.configurations.ImageFileStorageProperties
 import no.fg.hilflingbackend.repository.AlbumRepository
 import no.fg.hilflingbackend.repository.CategoryRepository
@@ -31,6 +32,7 @@ class PhotoServiceSpec : Spek({
   val eventOwnerReposity = mock<EventOwnerRepository> {}
   val photoTagRepository = mock<PhotoTagRepository> {}
   val environment = mock<Environment> {}
+  val azureBlobStorage = mock<AzureBlobStorage> {}
   describe("PhotoServiceSpec") {
     /*
 
@@ -104,7 +106,8 @@ class PhotoServiceSpec : Spek({
       albumRepository = albumRepository,
       categoryRepository = categoryRepository,
       eventOwnerRepository = eventOwnerReposity,
-      photoTagRepository = photoTagRepository
+      photoTagRepository = photoTagRepository,
+      azureBlobStorage = azureBlobStorage,
     )
   }
 })
