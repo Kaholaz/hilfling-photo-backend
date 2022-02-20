@@ -273,8 +273,7 @@ class PhotoService(
         logger.info("Photo created: ${photoDto.largeUrl} ")
       } catch (ex: Exception) {
         logger.error("Failed to save Photo to Database. Deleting file")
-        // Files.delete(filePath)
-        // TODO: Delete file if not saved to database
+        azureBlobStorage.deleteFile(blobContainerName = photoDto.securityLevel.securityLevelType.name.toLowerCase(), fileName = imageFileName)
       }
 
       imageUrl

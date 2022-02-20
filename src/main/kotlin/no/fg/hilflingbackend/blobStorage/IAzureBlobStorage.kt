@@ -5,4 +5,5 @@ import org.springframework.web.multipart.MultipartFile
 
 interface IAzureBlobStorage {
   fun saveFile(file: MultipartFile, blobContainerName: String = "alle", fileName: ImageFileName): String
+  fun deleteFile(blobContainerName: String, fileName: ImageFileName): Boolean
 }

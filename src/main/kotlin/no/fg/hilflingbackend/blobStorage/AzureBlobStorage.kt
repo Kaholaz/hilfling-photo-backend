@@ -35,4 +35,14 @@ class AzureBlobStorage(val azureStorageConfiguration: AzureStorageConfiguration)
       throw InvalidParameterException("Blob container $blobContainerName does not exist")
     }
   }
+
+  override fun deleteFile(blobContainerName: String, fileName: ImageFileName): Boolean {
+    return try {
+      val blobServiceClient = this.blobServiceClient.getBlobContainerClient(blobContainerName)
+      blobServiceClient.getBlobClient(fileName.filename).delete()
+      true
+    } catch (e: BlobStorageException) {
+      false
+    }
+  }
 }
