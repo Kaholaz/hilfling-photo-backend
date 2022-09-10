@@ -11,6 +11,7 @@ import me.liuwj.ktorm.entity.update
 import no.fg.hilflingbackend.dto.Page
 import no.fg.hilflingbackend.dto.PhotoGangBangerDto
 import no.fg.hilflingbackend.dto.PhotoGangBangerPatchRequestDto
+import no.fg.hilflingbackend.dto.RelationshipStatus
 import no.fg.hilflingbackend.dto.SamfundetUserDto
 import no.fg.hilflingbackend.dto.toEntity
 import no.fg.hilflingbackend.exceptions.EntityCreationException
@@ -19,6 +20,7 @@ import no.fg.hilflingbackend.model.PhotoGangBangers
 import no.fg.hilflingbackend.model.photo_gang_bangers
 import no.fg.hilflingbackend.model.samfundet_users
 import no.fg.hilflingbackend.model.toDto
+import no.fg.hilflingbackend.value_object.PhoneNumber
 import org.springframework.stereotype.Repository
 import java.util.UUID
 import javax.persistence.EntityNotFoundException
@@ -145,6 +147,7 @@ class PhotoGangBangerRepository(
   ): PhotoGangBangerDto? {
     val photoGangBangerDtoFromDb = findById(dto.photoGangBangerId.id)
       ?: throw EntityNotFoundException("Could not find PhotoGangBanger")
+    println(dto)
 
     var samfundetUserDto = photoGangBangerDtoFromDb.samfundetUser
     if (dto.samfundetUser != null) {
@@ -153,7 +156,7 @@ class PhotoGangBangerRepository(
         firstName = dto.samfundetUser.firstName ?: photoGangBangerDtoFromDb.samfundetUser.firstName,
         lastName = dto.samfundetUser.lastName ?: photoGangBangerDtoFromDb.samfundetUser.lastName,
         username = dto.samfundetUser.username ?: photoGangBangerDtoFromDb.samfundetUser.username,
-        phoneNumber = dto.samfundetUser.phoneNumber ?: photoGangBangerDtoFromDb.samfundetUser.phoneNumber,
+        phoneNumber = if (dto.samfundetUser.phoneNumber != null) PhoneNumber.invoke(dto.samfundetUser.phoneNumber.value)  else photoGangBangerDtoFromDb.samfundetUser.phoneNumber,
         email = dto.samfundetUser.email ?: photoGangBangerDtoFromDb.samfundetUser.email,
         profilePicturePath = dto.samfundetUser.profilePicturePath ?: photoGangBangerDtoFromDb.samfundetUser.profilePicturePath,
         sex = dto.samfundetUser.sex ?: photoGangBangerDtoFromDb.samfundetUser.sex,
@@ -172,7 +175,7 @@ class PhotoGangBangerRepository(
       isPang = dto.isPang ?: photoGangBangerDtoFromDb.isPang,
       isActive = dto.isActive ?: photoGangBangerDtoFromDb.isActive,
       semesterStart = dto.semesterStart ?: photoGangBangerDtoFromDb.semesterStart,
-      relationShipStatus = dto.relationshipStatus ?: photoGangBangerDtoFromDb.relationShipStatus,
+      relationShipStatus = dto.relationShipStatus ?: photoGangBangerDtoFromDb.relationShipStatus,
       position = dto.position ?: photoGangBangerDtoFromDb.position
     )
 

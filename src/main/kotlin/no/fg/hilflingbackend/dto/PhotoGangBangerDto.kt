@@ -5,7 +5,7 @@ import java.util.UUID
 
 data class PhotoGangBangerPatchRequestDto(
   val photoGangBangerId: PhotoGangBangerId,
-  val relationshipStatus: RelationshipStatus?,
+  val relationShipStatus: RelationshipStatus?,
   val semesterStart: SemesterStart?,
   val isActive: Boolean?,
   val isPang: Boolean?,
