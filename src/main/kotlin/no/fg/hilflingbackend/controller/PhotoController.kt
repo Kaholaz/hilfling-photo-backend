@@ -146,6 +146,17 @@ class PhotoController(
       .getByMotiveId(id, page ?: 0, pageSize ?: 100)
   )
 
+
+  @GetMapping("/good/{id}")
+  fun getGoodByMotive(
+    @PathVariable("id") id: UUID,
+    @RequestParam("page", required = false) page: Int?,
+    @RequestParam("pageSize", required = false) pageSize: Int?
+  ): ResponseEntity<Page<PhotoDto>?> = ResponseOk(
+    photoService
+      .getGoodByMotive(id, page ?: 0, pageSize ?: 100)
+  )
+
   @GetMapping
   fun getAll(
     @RequestParam("page", required = false) page: Int?,
@@ -165,6 +176,8 @@ class PhotoController(
     photoService
       .getCarouselPhotos(page ?: 0, pageSize ?: 6)
   )
+
+
 
   @GetMapping("/analog")
   fun getAllAnalogPhotos(

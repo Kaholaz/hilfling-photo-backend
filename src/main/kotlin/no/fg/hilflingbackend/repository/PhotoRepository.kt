@@ -212,6 +212,26 @@ open class PhotoRepository(
     )
   }
 
+  fun findGoodByMotive(id: UUID, page: Int, pageSize: Int): Page<PhotoDto>? {
+
+    val photos = database
+      .photos
+      .filter { it.motiveId eq id } 
+      .filter { it.isGoodPicture eq true }
+
+    val photoDtos = photos.toList()
+      .map { it.toDto(findCorrespondingPhotoTagDtos(it.id)) }
+
+
+
+    return Page(
+      page = page,
+      pageSize = pageSize,
+      totalRecords = photos.totalRecords,
+      currentList = photoDtos
+    )
+  }
+
   fun findBySecurityLevel(
     securityLevel: SecurityLevel,
     page: Int,

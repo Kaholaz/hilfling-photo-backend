@@ -410,6 +410,8 @@ class PhotoService(
   override fun getAllDigitalPhotos(page: Int, pageSize: Int): Page<PhotoDto> = photoRepository
     .findAllDigitalPhotos(page, pageSize)
 
+  fun getGoodByMotive(id: UUID, page: Int, pageSize: Int): Page<PhotoDto>? = photoRepository.findGoodByMotive(id, page, pageSize)
+
   fun getByMotiveId(id: UUID, page: Int, pageSize: Int): Page<PhotoDto>? = photoRepository.findByMotiveId(id, page, pageSize)
 
   override fun findById(id: UUID): PhotoDto = photoRepository.findById(id) ?: throw EntityNotFoundException("Did not find photo")
