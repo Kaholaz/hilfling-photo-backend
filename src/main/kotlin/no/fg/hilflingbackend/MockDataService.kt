@@ -388,9 +388,6 @@ class MockDataService {
       .forEach {
         albumRepository.create(it)
       }
-    generatePhotoTagData().forEach {
-      // hotoTagRepository.create(it)
-    }
     println("PhotoTags Seeded")
     generateSecurityLevelData().forEach {
       securityLevelRepository.create(it)
@@ -403,11 +400,14 @@ class MockDataService {
     generatePositionData().forEach {
       positionRepository.create(it)
     }
-    generatePhotoTagData().forEach {
-      // photoTagRepository.create(it)
-    }
     println("Position seeded")
     println(positionRepository.findAll())
+
+    generatePhotoTagData().forEach {
+      photoTagRepository.create(it)
+    }
+    println("Tags seeded")
+    println(photoTagRepository.findAll())
 
     generatePhotoGangBangerData().forEach {
       photoGangBangerRepository.create(it)
@@ -441,6 +441,7 @@ class MockDataService {
           set(it.securityLevelId, photoDto.securityLevel.securityLevelId.id)
           set(it.gangId, photoDto.gang?.gangId?.id)
           set(it.placeId, photoDto.placeDto.placeId.id)
+          set(it.)
           set(it.smallUrl, photoDto.smallUrl)
           set(it.mediumUrl, photoDto.mediumUrl)
           set(it.photoGangBangerId, photoDto.photoGangBangerDto.photoGangBangerId.id)
