@@ -288,11 +288,11 @@ class MockDataService {
         name = "WowFactor100"
       ),
       PhotoTagDto(
-        photoTagId = PhotoTagId(UUID.fromString(("d8771ab3-28a9-4b8c-991d-01f6123b8590"))),
+        photoTagId = PhotoTagId(UUID.fromString(("d8771ab3-28a9-4b8c-991d-01f6123b8591"))),
         name = "insane!"
       ),
       PhotoTagDto(
-        photoTagId = PhotoTagId(UUID.fromString(("d8771ab3-28a9-4b8c-991d-01f6123b8590"))),
+        photoTagId = PhotoTagId(UUID.fromString(("d8771ab3-28a9-4b8c-991d-01f6123b8592"))),
         name = "Meh"
       )
     )
@@ -441,7 +441,6 @@ class MockDataService {
           set(it.securityLevelId, photoDto.securityLevel.securityLevelId.id)
           set(it.gangId, photoDto.gang?.gangId?.id)
           set(it.placeId, photoDto.placeDto.placeId.id)
-          set(it.)
           set(it.smallUrl, photoDto.smallUrl)
           set(it.mediumUrl, photoDto.mediumUrl)
           set(it.photoGangBangerId, photoDto.photoGangBangerDto.photoGangBangerId.id)

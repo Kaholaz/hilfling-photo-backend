@@ -15,7 +15,6 @@ interface Photo : BaseModel<Photo> {
   companion object : Entity.Factory<Photo>()
 
   var isGoodPicture: Boolean
-
   var smallUrl: String
   var mediumUrl: String
   var largeUrl: String
@@ -28,11 +27,11 @@ interface Photo : BaseModel<Photo> {
   var album: Album
   var category: Category
   var photoGangBanger: PhotoGangBanger
+
 }
 
 object Photos : BaseTable<Photo>("photo") {
   val isGoodPicture = boolean("is_good_picture").bindTo { it.isGoodPicture }
-
   val smallUrl = varchar("small_url").bindTo { it.smallUrl }
   val mediumUrl = varchar("medium_url").bindTo { it.mediumUrl }
   val largeUrl = varchar("large_url").bindTo { it.largeUrl }
